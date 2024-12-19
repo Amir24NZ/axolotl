@@ -1,0 +1,32 @@
+name: Run Telegram Bot 24/7
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 * * * *'  # هر ساعت اجرا می‌شود، این را می‌توانید تغییر دهید
+
+jobs:
+  bot-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # از فایل requirements.txt استفاده می‌کند
+
+      - name: Run Telegram Bot
+        run: |
+          python bot.py  # نام فایل ربات شما
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}  # استفاده از توکن ربات از Secrets
